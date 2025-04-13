@@ -87,29 +87,68 @@ app.get("/", (req, res) => {
   });
 });
 
-// Trang admin upload
+// Trang admin upload + xoá ảnh
 app.get("/admin", (req, res) => {
-  res.send(`
-    <html>
-      <head>
-        <title>Upload Ảnh</title>
-        <style>
-          body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
-          form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-          input[type=file] { margin-bottom: 10px; }
-          button { padding: 10px 20px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        </style>
-      </head>
-      <body>
-        <h1>📤 Upload ảnh</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-          <input type="file" name="photos" multiple required><br>
-          <button type="submit">Upload</button>
-        </form>
-      </body>
-    </html>
-  `);
+  fs.readdir("uploads", (err, files) => {
+    if (err) {
+      return res.send("Lỗi đọc thư mục ảnh.");
+    }
+
+    const images = files.filter(file => /\.(jpg|jpeg|png|gif)$/i.test(file));
+
+    res.send(`
+      <html>
+        <head>
+          <title>Quản lý ảnh</title>
+          <style>
+            body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
+            form.upload-form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+            .img-card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; position: relative; }
+            img { width: 100%; height: auto; border-radius: 5px; }
+            form.delete-form { margin-top: 10px; }
+            button { padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            button:hover { background: #c0392b; }
+          </style>
+        </head>
+        <body>
+          <h1>📤 Upload ảnh</h1>
+          <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="photos" multiple required><br><br>
+            <button type="submit" style="background:#2ecc71;">Upload</button>
+          </form>
+
+          <h2>🧹 Danh sách ảnh</h2>
+          <div class="grid">
+            ${images.map(file => `
+              <div class="img-card">
+                <img src="/uploads/${file}" alt="${file}">
+                <form class="delete-form" action="/delete" method="post">
+                  <input type="hidden" name="filename" value="${file}">
+                  <button type="submit">Xóa ảnh</button>
+                </form>
+              </div>
+            `).join("")}
+          </div>
+        </body>
+      </html>
+    `);
+  });
 });
+
+// Xử lý xóa ảnh
+app.post("/delete", (req, res) => {
+  const filename = path.basename(req.body.filename); // tránh path traversal
+  const filePath = path.join(__dirname, "uploads", filename);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Lỗi xoá ảnh:", err);
+    }
+    res.redirect("/admin");
+  });
+});
+
 
 // Xử lý upload nhiều ảnh
 app.post("/upload", upload.array("photos", 10), (req, res) => {
