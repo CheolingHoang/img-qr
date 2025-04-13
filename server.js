@@ -37,16 +37,82 @@ app.get("/", (req, res) => {
           <title>Gallery</title>
           <style>
             body { font-family: sans-serif; padding: 20px; background: #f5f5f5; }
-            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-            .img-card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; position: relative; }
-            .img-card img { width: 100%; height: auto; border-radius: 5px; cursor: pointer; transition: transform 0.2s; }
+            .grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+              gap: 15px;
+            }
+            .img-card {
+              background: white;
+              border-radius: 10px;
+              padding: 10px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              text-align: center;
+              position: relative;
+            }
+            .img-card img {
+              width: 100%;
+              height: auto;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: transform 0.2s;
+            }
             .img-card img:hover { transform: scale(1.05); }
-            .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
-            .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 90%; max-height: 90%; text-align: center; position: relative; }
-            .modal-content img { max-width: 100%; max-height: 80vh; }
-            .download-btn { margin-top: 10px; background: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; text-decoration: none; display: inline-block; }
+
+            @media (max-width: 600px) {
+              .grid {
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+              }
+              .img-card img {
+                max-height: 300px;
+                object-fit: contain;
+              }
+            }
+
+            .modal {
+              display: none;
+              position: fixed;
+              z-index: 10;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0,0,0,0.7);
+              justify-content: center;
+              align-items: center;
+            }
+            .modal-content {
+              background: white;
+              padding: 20px;
+              border-radius: 8px;
+              max-width: 90%;
+              max-height: 90%;
+              text-align: center;
+              position: relative;
+            }
+            .modal-content img {
+              max-width: 100%;
+              max-height: 80vh;
+            }
+            .download-btn {
+              margin-top: 10px;
+              background: #3498db;
+              color: white;
+              padding: 10px 20px;
+              border: none;
+              border-radius: 5px;
+              text-decoration: none;
+              display: inline-block;
+            }
             .download-btn:hover { background-color: #2980b9; }
-            .close-btn { position: absolute; top: 10px; right: 15px; font-size: 18px; cursor: pointer; color: #333; }
+            .close-btn {
+              position: absolute;
+              top: 10px;
+              right: 15px;
+              font-size: 18px;
+              cursor: pointer;
+              color: #333;
+            }
           </style>
         </head>
         <body>
@@ -102,12 +168,49 @@ app.get("/admin", (req, res) => {
           <title>Quản lý ảnh</title>
           <style>
             body { font-family: sans-serif; background: #f5f5f5; padding: 20px; }
-            form.upload-form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
-            .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-            .img-card { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; position: relative; }
-            img { width: 100%; height: auto; border-radius: 5px; }
+            form.upload-form {
+              background: white;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              margin-bottom: 30px;
+            }
+            .grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+              gap: 15px;
+            }
+            @media (max-width: 600px) {
+              .grid {
+                grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+              }
+              .img-card img {
+                max-height: 300px;
+                object-fit: contain;
+              }
+            }
+            .img-card {
+              background: white;
+              border-radius: 10px;
+              padding: 10px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              text-align: center;
+              position: relative;
+            }
+            img {
+              width: 100%;
+              height: auto;
+              border-radius: 5px;
+            }
             form.delete-form { margin-top: 10px; }
-            button { padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            button {
+              padding: 8px 16px;
+              background: #e74c3c;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            }
             button:hover { background: #c0392b; }
           </style>
         </head>
@@ -148,7 +251,6 @@ app.post("/delete", (req, res) => {
     res.redirect("/admin");
   });
 });
-
 
 // Xử lý upload nhiều ảnh
 app.post("/upload", upload.array("photos", 10), (req, res) => {
