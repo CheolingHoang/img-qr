@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Upload ảnh</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+  <h1 class="text-2xl font-bold mb-4">Khu vực quản lý</h1>
+
+  <% if (!loggedIn) { %>
+    <form action="/admin" method="POST" class="space-y-4">
+      <input type="text" name="username" placeholder="Username" class="border p-2 rounded w-full">
+      <input type="password" name="password" placeholder="Password" class="border p-2 rounded w-full">
+      <button class="bg-blue-500 text-white px-4 py-2 rounded">Đăng nhập</button>
+    </form>
+  <% } else { %>
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
+      <input type="file" name="image" accept="image/*" required class="block">
+      <button class="bg-green-500 text-white px-4 py-2 rounded">Tải ảnh lên</button>
+    </form>
+    <a href="/" class="block mt-4 text-blue-600">← Quay lại trang chính</a>
+  <% } %>
+</body>
+</html>

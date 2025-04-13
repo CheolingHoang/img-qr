@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thư viện ảnh</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+  <h1 class="text-3xl font-bold mb-6 text-center">Thư viện ảnh</h1>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <% files.forEach(file => { %>
+      <div class="bg-white shadow-md p-2 rounded">
+        <img src="/uploads/<%= file %>" alt="Ảnh" class="w-full h-48 object-cover rounded">
+        <a href="/uploads/<%= file %>" download class="block mt-2 text-blue-500 text-sm">Tải xuống</a>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
